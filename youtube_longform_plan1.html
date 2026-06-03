@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>롱폼 기획서 — How to Eunbi</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface-2: #f4f3f0;
+    --border: rgba(0,0,0,0.1);
+    --border-med: rgba(0,0,0,0.18);
+    --border-strong: rgba(0,0,0,0.28);
+    --text: #1a1a18;
+    --text-2: #5a5a56;
+    --text-3: #9a9a94;
+    --accent: #2a2a26;
+    --tag-key-bg: #fff3e0;
+    --tag-key: #b45309;
+    --tag-core-bg: #fce7f3;
+    --tag-core: #9d174d;
+    --badge-bg: #e8f4fd;
+    --badge: #1e5f9e;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141412;
+      --surface: #1e1e1a;
+      --surface-2: #28281f;
+      --border: rgba(255,255,255,0.08);
+      --border-med: rgba(255,255,255,0.14);
+      --border-strong: rgba(255,255,255,0.22);
+      --text: #f0f0e8;
+      --text-2: #a0a098;
+      --text-3: #606058;
+      --accent: #e8e8e0;
+      --tag-key-bg: #2a1e0a;
+      --tag-key: #f59e0b;
+      --tag-core-bg: #2a0a1a;
+      --tag-core: #f472b6;
+      --badge-bg: #0a1a2a;
+      --badge: #60a5fa;
+    }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  /* Header */
+  .doc-header {
+    border-bottom: 1.5px solid var(--border-strong);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .doc-type {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 0.6rem;
+  }
+  .doc-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 1rem;
+    word-break: keep-all;
+  }
+  .doc-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .meta-label {
+    color: var(--text-3);
+    margin-right: 4px;
+  }
+
+  /* Section */
+  .section { margin-bottom: 2.8rem; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--border);
+  }
+
+  /* Title cards */
+  .title-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .title-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+  }
+  .title-card.first {
+    grid-column: 1 / -1;
+    background: var(--surface-2);
+    border: 1.5px solid var(--border-strong);
+  }
+  .title-rank { font-size: 11px; color: var(--text-3); margin-bottom: 5px; }
+  .title-text { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.5; }
+
+  /* Core Q */
+  .core-q {
+    background: var(--surface-2);
+    border-left: 3px solid var(--border-strong);
+    border-radius: 0 10px 10px 0;
+    padding: 1rem 1.25rem;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.9;
+    word-break: keep-all;
+  }
+
+  /* Pills */
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border-med);
+    color: var(--text-2);
+  }
+
+  /* Chapters */
+  .chapter-list { display: flex; flex-direction: column; gap: 12px; }
+  .chapter { display: flex; gap: 14px; align-items: flex-start; }
+  .chapter-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 0.5px solid var(--border-med);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+    color: var(--text-2);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .chapter-body { flex: 1; }
+  .chapter-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; word-break: keep-all; }
+  .chapter-sub { font-size: 13px; color: var(--text-2); line-height: 1.7; word-break: keep-all; }
+  .chapter-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 20px;
+    margin-top: 6px;
+  }
+  .tag-key { background: var(--tag-key-bg); color: var(--tag-key); }
+  .tag-core { background: var(--tag-core-bg); color: var(--tag-core); }
+
+  /* Script */
+  .script-block {
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .script-head {
+    background: var(--surface-2);
+    border-bottom: 0.5px solid var(--border);
+    padding: 0.55rem 1.1rem;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-2);
+  }
+  .script-body {
+    padding: 1.1rem 1.25rem;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 2;
+    white-space: pre-line;
+    word-break: keep-all;
+  }
+
+  /* Ending */
+  .ending {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 2.1;
+    white-space: pre-line;
+    word-break: keep-all;
+  }
+
+  /* Insight */
+  .insight-box {
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 8px;
+  }
+  .insight-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .insight-body { font-size: 13px; color: var(--text-2); line-height: 1.85; word-break: keep-all; }
+  .insight-body b { color: var(--text); font-weight: 600; }
+
+  /* Shortform */
+  .sf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .sf-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+  }
+  .sf-card.strong {
+    background: var(--surface-2);
+    border: 1.5px solid var(--border-strong);
+    grid-column: 1 / -1;
+  }
+  .sf-num { font-size: 11px; color: var(--text-3); margin-bottom: 4px; }
+  .sf-hook { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; line-height: 1.4; word-break: keep-all; }
+  .sf-copy { font-size: 12px; color: var(--text-2); line-height: 1.7; word-break: keep-all; }
+  .sf-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 6px;
+    background: var(--badge-bg);
+    color: var(--badge);
+  }
+
+  @media (max-width: 520px) {
+    .title-cards, .sf-grid { grid-template-columns: 1fr; }
+    .title-card.first, .sf-card.strong { grid-column: 1; }
+    .doc-title { font-size: 21px; }
+    body { padding: 2rem 1rem 5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="doc-header">
+    <div class="doc-type">유튜브 롱폼 기획서</div>
+    <div class="doc-title">왜 더 이상 '매력적인 사람'에게 끌리지 않을까?</div>
+    <div class="doc-meta">
+      <div class="meta-item"><span class="meta-label">채널</span>How to Eunbi</div>
+      <div class="meta-item"><span class="meta-label">포맷</span>롱폼 에세이</div>
+      <div class="meta-item"><span class="meta-label">숏폼 추출</span>10개</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">타이틀 후보</div>
+    <div class="title-cards">
+      <div class="title-card first">
+        <div class="title-rank">1순위 (메인)</div>
+        <div class="title-text">왜 더 이상 '매력적인 사람'에게 끌리지 않을까?</div>
+      </div>
+      <div class="title-card">
+        <div class="title-rank">2순위</div>
+        <div class="title-text">나는 왜 예전과 다른 사람을 좋아하게 되었을까?</div>
+      </div>
+      <div class="title-card">
+        <div class="title-rank">3순위</div>
+        <div class="title-text">사람을 보는 기준이 완전히 바뀌었다</div>
+      </div>
+      <div class="title-card">
+        <div class="title-rank">4순위</div>
+        <div class="title-text">캐릭터만으로는 부족해진 이유</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">핵심 질문</div>
+    <div class="core-q">왜 나는 예전엔 특별한 사람들에게 끌렸는데, 지금은 자기 삶을 잘 운영하는 사람을 더 높게 평가할까?</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">콘텐츠 태그</div>
+    <div class="pills">
+      <div class="pill">인간관계</div>
+      <div class="pill">연애관</div>
+      <div class="pill">자기성장</div>
+      <div class="pill">20대</div>
+      <div class="pill">가치관 변화</div>
+      <div class="pill">셀프리스펙트</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">챕터 구성</div>
+    <div class="chapter-list">
+      <div class="chapter">
+        <div class="chapter-num">0</div>
+        <div class="chapter-body">
+          <div class="chapter-title">오프닝 (약 1분)</div>
+          <div class="chapter-sub">예전엔 "이 사람이 뭘 가진 사람인가"를 봤다. 지금은 "이 사람이 자기 삶을 어떻게 운영하는가"를 본다. 내가 좋아했던 사람들은 전부 강한 캐릭터를 가진 사람들이었다.</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-num">1</div>
+        <div class="chapter-body">
+          <div class="chapter-title">나는 원래 캐릭터에 끌리는 사람이었다</div>
+          <div class="chapter-sub">A (영어·패션·해외·건축), L (디자인 천재·타이포), K (철학·입체성·외모) — 공통점: 자기만의 세계가 있음.</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-num">2</div>
+        <div class="chapter-body">
+          <div class="chapter-title">나는 사람을 통해 능력치를 얻고 싶었다</div>
+          <div class="chapter-sub">20대 초반 필요했던 것: 디자인, 영어, 해외, 사진. 무의식적으로 "이 사람에게서 무엇을 배울 수 있을까?"를 봤음. 사람이라기보다 일종의 포털·브릿지·스승 같은 역할.</div>
+          <span class="chapter-tag tag-key">여기 중요</span>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-num">3</div>
+        <div class="chapter-body">
+          <div class="chapter-title">근데 시간이 지나면서 이상한 걸 발견했다</div>
+          <div class="chapter-sub">배울 건 배웠는데 — 왜 행복하지 않았지? 왜 항상 관계 비용이 컸지? 왜 결국 힘들었지?</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-num">4</div>
+        <div class="chapter-body">
+          <div class="chapter-title">캐릭터와 삶은 다를 수 있다</div>
+          <div class="chapter-sub">캐릭터 있음 ≠ 자기 삶을 운영함. A·L·K 각각 능력·재능·매력은 있음. 근데 "자기 문제를 직면하는가 / 자기 삶을 책임지는가 / 관계를 건강하게 운영하는가"는 다른 문제.</div>
+          <span class="chapter-tag tag-core">여기 핵심</span>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-num">5</div>
+        <div class="chapter-body">
+          <div class="chapter-title">지금 내가 오래 남긴 사람들</div>
+          <div class="chapter-sub">Y, Z, T — 공통점: 자기 삶을 굴림 / 말보다 행동 / 캐릭터도 있지만 현실도 있음 / 그래서 편함.</div>
+        </div>
+      </div>
+      <div class="chapter">
+        <div class="chapter-num">6</div>
+        <div class="chapter-body">
+          <div class="chapter-title">왜 나는 지금 연애를 쉬고 있을까? (최종 챕터)</div>
+          <div class="chapter-sub">연애를 포기한 게 아니다. 내 삶을 먼저 선택한 것이다. 누군가가 내 삶에 들어오려면 무언가를 가르쳐주는 사람일 필요 없다 — 함께 있어도 편안한 사람, 대화가 가능한 사람, 자기 삶을 잘 살아가는 사람.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">오프닝 스크립트</div>
+    <div class="script-block">
+      <div class="script-head">오프닝 (약 1분)</div>
+      <div class="script-body">최근 깨달은 게 있다.
+
+예전에는 사람을 볼 때
+"이 사람이 뭘 가진 사람인가"를 봤다.
+
+근데 지금은
+"이 사람이 자기 삶을 어떻게 운영하는가"를 본다.
+
+생각해보니 내가 좋아했던 사람들은
+전부 굉장히 강한 캐릭터를 가진 사람들이었다.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">엔딩 스크립트</div>
+    <div class="ending">최근 몇 년 동안 내가 사람을 보는 기준은 완전히 바뀌었다.
+
+예전에는 "이 사람은 무엇을 가진 사람인가?"를 봤다.
+지금은 "이 사람은 자기 삶을 어떻게 살아가고 있는가?"를 본다.
+
+어쩌면 내가 사람을 보는 기준이 높아진 게 아니라,
+내가 내 삶을 더 좋아하게 된 것인지도 모르겠다.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">기획 인사이트</div>
+    <div class="insight-box">
+      <div class="insight-title">왜 이 콘텐츠가 작동하는가</div>
+      <div class="insight-body">A, L, K 이야기로 시작하지만 결국은 연애 이야기가 아니라 <b>사람을 보는 기준이 성숙해지는 과정</b>에 대한 이야기. 훨씬 보편적인 콘텐츠가 됨.</div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">평가 항목의 변화</div>
+      <div class="insight-body">예전: 재밌는가 / 매력적인가 / 배울 게 있는가<br>지금: 재밌는가 / 자기 세계가 있는가 / 배울 게 있는가 / <b>자기 삶을 운영하는가 / 자기 문제를 직면하는가</b></div>
+    </div>
+    <div class="insight-box">
+      <div class="insight-title">핵심 프레임</div>
+      <div class="insight-body">지금 상태는 "연애를 포기했다"가 아니라 <b>기회비용 계산이 바뀐 상태.</b> 기준이 높아진 게 아니라, 내 삶이 이미 꽉 차 있기 때문에 확률적으로 후보가 줄어든 것.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">숏폼 추출 (10개)</div>
+    <div class="sf-grid">
+      <div class="sf-card strong">
+        <div class="sf-num">#10 — 가장 강력</div>
+        <div class="sf-hook">내가 사람을 보는 기준이 바뀐 순간</div>
+        <div class="sf-copy">"예전에는 '이 사람이 나에게 무엇을 줄 수 있는가?'를 봤다. 지금은 '이 사람이 자기 삶을 어떻게 살아가는가?'를 본다."</div>
+        <span class="sf-badge">릴스 오프닝으로 강함</span>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#1</div>
+        <div class="sf-hook">왜 나는 지금 연애를 쉬고 있을까?</div>
+        <div class="sf-copy">"연애를 싫어하게 된 게 아니다. 내 삶이 너무 재밌어졌다."</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#2</div>
+        <div class="sf-hook">매력적인 사람과 건강한 사람은 다르다</div>
+        <div class="sf-copy">"예전에는 캐릭터만 봤다. 지금은 그 사람이 자기 삶을 어떻게 사는지 본다."</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#3</div>
+        <div class="sf-hook">사람을 보는 기준이 바뀌었다</div>
+        <div class="sf-copy">"예전: '이 사람이 뭘 가진 사람인가?' → 지금: '이 사람이 자기 삶을 어떻게 살아가는가?'"</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#4</div>
+        <div class="sf-hook">왜 더 이상 밀당이 재밌지 않을까?</div>
+        <div class="sf-copy">"예전에는 재밌었다. 지금은 그냥 귀찮다. 그 에너지면 차라리 여행 가고 콘텐츠 만든다."</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#5</div>
+        <div class="sf-hook">내가 좋아했던 사람들의 공통점</div>
+        <div class="sf-copy">"A도. L도. K도. 전부 자기만의 세계가 있는 사람들이었다."</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#6</div>
+        <div class="sf-hook">캐릭터가 있는 사람을 좋아했다</div>
+        <div class="sf-copy">"나는 잘생긴 사람보다 캐릭터가 있는 사람을 좋아했다. 근데 이제는 캐릭터만으로는 부족하다."</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#7</div>
+        <div class="sf-hook">왜 사람에게 쉽게 안 빠질까?</div>
+        <div class="sf-copy">"기준이 높아진 게 아니다. 내 삶이 이미 꽤 괜찮아졌기 때문이다."</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#8</div>
+        <div class="sf-hook">좋은 관계의 기준</div>
+        <div class="sf-copy">"요즘 내가 좋아하는 사람들의 공통점은 자기 삶을 스스로 굴리는 사람들이다."</div>
+      </div>
+      <div class="sf-card">
+        <div class="sf-num">#9</div>
+        <div class="sf-hook">연애를 포기한 게 아니다</div>
+        <div class="sf-copy">"연애를 포기한 게 아니라 내 삶을 먼저 선택한 것이다."</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
